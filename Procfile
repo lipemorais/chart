@@ -1,1 +1,1 @@
-web: gunicorn chart_challenge.wsgi  --log-file -
+web: python manage.py runserver
