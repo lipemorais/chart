@@ -12,13 +12,10 @@ help:
 	@echo '    delpyc ................................. apaga pyc e arquivos desnecessários'
 	@echo '    setup .................................. faz o setup do projeto'
 	@echo '    create-env ............................. cria a virtualenv chart-env'
-	@echo '    create-db .............................. cria o banco de dados'
-	@echo '    db-migrate ............................. roda as migrations'
-	@echo '    populate-db ............................ popula o banco de dados com um dump'
-	@echo '    clean_up ............................... apaga a virtualenv chart-env  e o banco de dados chart'
+	@echo '    clean_up ............................... apaga a virtualenv chart-env'
 
 
-setup:create-env requirements db-migrate populate-db delpyc start
+setup:create-env requirements delpyc start
 
 create-env:
 	@echo '=============================================================='
@@ -32,24 +29,6 @@ requirements:
 	@echo 'Instalando requirements'
 	@echo '=============================================================='
 	@pip install -r requirements.txt
-
-create-db:
-	@echo '=============================================================='
-	@echo 'Criando o banco de dados'
-	@echo '=============================================================='
-	@echo 'CREATE DATABASE IF NOT EXISTS chart;'| mysql -u root
-
-db-migrate:create-db
-	@echo '=============================================================='
-	@echo 'Rodando as migrations'
-	@echo '=============================================================='
-	@python manage.py migrate
-
-# populate-db:
-# 	@echo '=============================================================='
-# 	@echo 'Populando o banco de dados'
-# 	@echo '=============================================================='
-# 	@mysql -u root chart < chart/fixtures/chart_2014-11-12.sql
 
 start: delpyc
 	@echo '=============================================================='
@@ -70,9 +49,15 @@ shell:delpyc
 	@python ./manage.py shell
 
 clean_up:
-	@echo 'DROP DATABASE IF EXISTS chart;'| mysql -u root
 	@rm -rf chart-env
 
-test_integration:delpyc
-	@python manage.py test chart/tests/integration/ --verbosity=3
+unit:delpyc
+	@python manage.py test chart_challenge/tests/unit/ --verbosity=3
 
+integration:delpyc
+	@python manage.py test chart_challenge/tests/unit/ --verbosity=3
+
+acceptance:delpyc
+	@python manage.py test chart_challenge/tests/acceptance/ --verbosity=3
+
+test:delpyc unit integration acceptance
