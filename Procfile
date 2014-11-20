@@ -1,0 +1,1 @@
+web: gunicorn chart_challenge.wsgi --log-file -
