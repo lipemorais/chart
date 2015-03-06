@@ -8,6 +8,7 @@ import requests
 class ChartView(TemplateView):
     template_name = 'index.html'
 
+    # TODO organize this mess
     def get_context_data(self):
         context = {}
         path = 'http://jsonrates.com/historical/?'
